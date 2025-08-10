@@ -1,7 +1,7 @@
 from django.urls import path, include
-from ..views import CustomUserViewset
+from ..views import UserViewset
 
 
 urlpatterns = [
-    path('', CustomUserViewset.as_view({'post': 'create'}), name='register'),
+    path('', UserViewset.as_view({'post': 'create'}), name='register'),
 ]

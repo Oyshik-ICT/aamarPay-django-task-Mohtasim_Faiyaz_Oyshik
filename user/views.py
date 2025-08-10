@@ -9,7 +9,7 @@ from .serializers import UserSerializer
 logger = logging.getLogger(__name__)
 
 
-class CustomUserViewset(viewsets.ModelViewSet):
+class UserViewset(viewsets.ModelViewSet):
     """
     API endpoints to User objects
     - Anyone can create user
