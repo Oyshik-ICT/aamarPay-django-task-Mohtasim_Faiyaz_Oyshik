@@ -3,8 +3,8 @@ import logging
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from django.contrib.auth.models import User
-from .serializers import UserSerializer
+from .models import CustomUser
+from .serializers import CustomUserSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -17,8 +17,8 @@ class UserViewset(viewsets.ModelViewSet):
     - Staff can view/update all data
     """
 
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
 
     def get_permissions(self):
         if self.action == "create":
@@ -41,4 +41,4 @@ class UserViewset(viewsets.ModelViewSet):
                 f"Error occure in get_queryset method in UserViewset => {e}",
                 exc_info=True,
             )
-            return User.objects.none()
+            return CustomUser.objects.none()

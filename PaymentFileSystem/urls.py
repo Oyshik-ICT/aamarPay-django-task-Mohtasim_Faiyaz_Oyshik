@@ -16,10 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from payment.views import InitiatePayment, PaymentSuccessAPIView, PaymentFailureAPIView, payment_cancel, TransctionsListView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/login/", include("user.urls.token_urls")),
     path("api/register/", include("user.urls.regi_urls")),
     path("api/user/", include("user.urls.user_urls")),
+    path("api/initiate-payment/", InitiatePayment.as_view(), name="initiate-payment"),
+    path("api/payment/success/", PaymentSuccessAPIView.as_view(), name="payment-success"),
+    path("api/payment/failure/", PaymentFailureAPIView.as_view(), name="payment-failure"),
+    path("api/payment/cancel/", payment_cancel, name="payment-cancel"),
+    path("api/transactions/", TransctionsListView.as_view(), name="transactions-list"),
 ]
