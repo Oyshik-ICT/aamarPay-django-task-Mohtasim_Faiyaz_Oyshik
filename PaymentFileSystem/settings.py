@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'payment.apps.PaymentConfig',
     'fileprocessing.apps.FileprocessingConfig',
+    'dashboard.apps.DashboardConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

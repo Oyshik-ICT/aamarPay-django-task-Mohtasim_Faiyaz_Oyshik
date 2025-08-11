@@ -20,6 +20,7 @@ from payment.views import InitiatePayment, PaymentSuccessAPIView, PaymentFailure
 from fileprocessing.views import FileUploadAPIView, FileListView, ActivityLogList
 from django.conf import settings
 from django.conf.urls.static import static
+from dashboard.views import dashboard
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -34,6 +35,7 @@ urlpatterns = [
     path("api/upload/", FileUploadAPIView.as_view(), name="file-upload"),
     path("api/file/", FileListView.as_view(), name="file-list"),
     path("api/activity/", ActivityLogList.as_view(), name="activity-log-list"),
+    path("api/dashboard/", dashboard, name="dashboard"),
     path('silk/', include('silk.urls', namespace='silk')),
 ]
 
