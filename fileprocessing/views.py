@@ -8,6 +8,7 @@ from rest_framework import status
 from .serializers import FileUploadSerializer, ActivityLogSerializer
 from rest_framework import generics
 from utils.logger import ActivityLogger
+from .tasks import count_words
 
 class FileUploadAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -26,8 +27,10 @@ class FileUploadAPIView(APIView):
             )
         serializer = FileUploadSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(user=request.user)
+            file_upload = serializer.save(user=request.user)
+            
             ActivityLogger.log_file_upload(request.user, serializer.data.get("filename"))
+            count_words.delay(file_upload.file_id)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

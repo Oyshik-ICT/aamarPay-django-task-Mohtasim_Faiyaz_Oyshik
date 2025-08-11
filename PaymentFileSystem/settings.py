@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'silk',
+    'django_celery_results',
     'user.apps.UserConfig',
     'payment.apps.PaymentConfig',
     'fileprocessing.apps.FileprocessingConfig',
@@ -147,3 +148,14 @@ REST_FRAMEWORK = {
 AUTH_USER_MODEL = "user.CustomUser"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+
+
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/1"
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_CACHE_BACKEND = 'django-cache'
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TASK_SERIALIZER = "json"
+CELERY_TIMEZONE = "Asia/Dhaka"
+CELERY_RESULT_EXTENDED = True

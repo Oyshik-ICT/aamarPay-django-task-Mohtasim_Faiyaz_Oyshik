@@ -16,3 +16,12 @@ class ActivityLogger:
             action = "payment",
             metadata = {"tranasction_id": tranasction_id, "payment_status": payment_status, "amount": 100.00}
         )
+    
+    @staticmethod
+    def log_word_count(user, filename, word_count, status):
+        ActivityLog.objects.create(
+            user = user,
+            action = "word_count",
+            metadata = {"filename": filename, "word_count": word_count, "status": status}
+        )
+
