@@ -7,7 +7,7 @@ class PaymentTransaction(models.Model):
     payment_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="paymentTransactions")
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=100.00)
-    status = models.CharField(max_length=15, default=StatusChoice.PENDING)
+    status = models.CharField(max_length=15, choices=StatusChoice.choices, default=StatusChoice.PENDING)
     transaction_id = models.CharField(max_length=100, blank=True, null=True)
     gateway_response = models.JSONField(blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)

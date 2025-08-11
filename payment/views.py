@@ -10,6 +10,8 @@ import requests
 from rest_framework import status, generics
 from .serializers import PaymentTransactionSerializer
 from rest_framework.decorators import api_view
+from utils.logger import ActivityLogger
+from user.models import CustomUser
 
 def get_base_url(request):
         protocol = "https" if request.is_secure() else "http"
@@ -63,12 +65,14 @@ class PaymentSuccessAPIView(APIView):
             gateway_data = request.data
             trans_id = gateway_data.get("mer_txnid")
             pay_status = gateway_data.get("pay_status")
+            user_name = gateway_data.get("cus_name")
 
-            if not all([gateway_data, trans_id, pay_status]):
+            if not all([gateway_data, trans_id, pay_status, user_name]):
                 return Response(
                     {"detail": "Missing required parameters"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+            user = CustomUser.objects.get(username=user_name)
 
             try:
                 payment = PaymentTransaction.objects.get(transaction_id=trans_id)
@@ -92,6 +96,7 @@ class PaymentSuccessAPIView(APIView):
             base_url = get_base_url(request)
 
             if pay_status == "Successful":
+                ActivityLogger.log_payment_info(user, trans_id, pay_status)
                 return Response({
                     "message": "Payment Successful",
                     "transaction_id": trans_id,
@@ -114,12 +119,16 @@ class PaymentFailureAPIView(APIView):
         try:
             gateway_data = request.data
             trans_id = gateway_data.get("mer_txnid")
+            user_name = gateway_data.get("cus_name")
 
-            if not all([gateway_data, trans_id]):
+
+            if not all([gateway_data, trans_id, user_name]):
                 return Response(
                     {"detail": "Missing required parameters"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+            
+            user = CustomUser.objects.get(username=user_name)
 
             try:
                 payment = PaymentTransaction.objects.get(transaction_id=trans_id)
@@ -134,7 +143,7 @@ class PaymentFailureAPIView(APIView):
             payment.status = StatusChoice.FAILED
 
             payment.save(update_fields=["status", "gateway_response"])
-            base_url = get_base_url(request)
+            ActivityLogger.log_payment_info(user, trans_id, "Failed")
 
             return Response({
                     "message": "Payment is failed",
@@ -154,7 +163,7 @@ def payment_cancel(request):
     })
 
 class TransctionsListView(generics.ListAPIView):
-    queryset = PaymentTransaction.objects.all()
+    queryset = PaymentTransaction.objects.select_related("user")
     serializer_class = PaymentTransactionSerializer
     permission_classes = [IsAdminUser]
 
