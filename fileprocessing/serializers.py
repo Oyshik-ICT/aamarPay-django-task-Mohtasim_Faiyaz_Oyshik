@@ -9,10 +9,16 @@ class FileUploadSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "file_id": {"read_only": True},
             "user": {"read_only": True},
+            "filename": {"read_only": True},
             "upload_time": {"read_only": True},
             "status": {"read_only": True},
             "word_count": {"read_only": True}
         }
+
+    def create(self, validated_data):
+        file = validated_data.get("file")
+        validated_data["filename"] = file.name
+        return super().create(validated_data)
 
 class ActivityLogSerializer(serializers.ModelSerializer):
     class Meta:
