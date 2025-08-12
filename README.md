@@ -505,9 +505,8 @@ File upload is restricted based on payment status:
 - For example: If a user has made 2 successful payments and uploaded 1 file, they can upload 1 more file
 - This ensures users pay before uploading each file
 
-### Gateway Callback Endpoints
+## Payment Flow
 
-The payment callback endpoints (`success`, `failure`, `cancel`) are designed to be accessed by the aamarPay gateway and don't require authentication, but they validate the transaction data internally.
 
 ### Step 1: Complete User Registration and Login
 1. Register a new user using the registration endpoint
