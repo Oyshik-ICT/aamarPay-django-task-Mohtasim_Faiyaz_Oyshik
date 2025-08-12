@@ -14,13 +14,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
-from payment.views import InitiatePayment, PaymentSuccessAPIView, PaymentFailureAPIView, payment_cancel, TransctionsListView
-from fileprocessing.views import FileUploadAPIView, FileListView, ActivityLogList
+
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import include, path
+
 from dashboard.views import dashboard
+from fileprocessing.views import ActivityLogList, FileListView, FileUploadAPIView
+from payment.views import (
+    InitiatePayment,
+    PaymentFailureAPIView,
+    PaymentSuccessAPIView,
+    TransctionsListView,
+    payment_cancel,
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -28,15 +36,19 @@ urlpatterns = [
     path("api/register/", include("user.urls.regi_urls")),
     path("api/user/", include("user.urls.user_urls")),
     path("api/initiate-payment/", InitiatePayment.as_view(), name="initiate-payment"),
-    path("api/payment/success/", PaymentSuccessAPIView.as_view(), name="payment-success"),
-    path("api/payment/failure/", PaymentFailureAPIView.as_view(), name="payment-failure"),
+    path(
+        "api/payment/success/", PaymentSuccessAPIView.as_view(), name="payment-success"
+    ),
+    path(
+        "api/payment/failure/", PaymentFailureAPIView.as_view(), name="payment-failure"
+    ),
     path("api/payment/cancel/", payment_cancel, name="payment-cancel"),
     path("api/transactions/", TransctionsListView.as_view(), name="transactions-list"),
     path("api/upload/", FileUploadAPIView.as_view(), name="file-upload"),
     path("api/file/", FileListView.as_view(), name="file-list"),
     path("api/activity/", ActivityLogList.as_view(), name="activity-log-list"),
     path("api/dashboard/", dashboard, name="dashboard"),
-    path('silk/', include('silk.urls', namespace='silk')),
+    path("silk/", include("silk.urls", namespace="silk")),
 ]
 
 if settings.DEBUG:

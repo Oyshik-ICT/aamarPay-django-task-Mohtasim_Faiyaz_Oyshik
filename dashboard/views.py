@@ -1,18 +1,28 @@
+import logging
+
+from django.contrib.admin.views.decorators import staff_member_required
+from django.http import JsonResponse
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from fileprocessing.models import FileUpload, ActivityLog
+
+from fileprocessing.models import ActivityLog, FileUpload
 from payment.models import PaymentTransaction
 
-@login_required
+logger = logging.getLogger(__name__)
+
+
+@staff_member_required
 def dashboard(request):
-    files = FileUpload.objects.all()
-    payments = PaymentTransaction.objects.all()
-    activities = ActivityLog.objects.all()
+    """
+    Render dashboard page, showing all user's files, payments and activity logs. Only staff member can do this .
+    """
+    try:
+        files = FileUpload.objects.all().order_by("-upload_time")
+        payments = PaymentTransaction.objects.all().order_by("-timestamp")
+        activities = ActivityLog.objects.all().order_by("-timestamp")
 
-    context = {
-        'files': files,
-        'payments': payments,
-        'activities': activities
-    }
+        context = {"files": files, "payments": payments, "activities": activities}
 
-    return render(request, 'dashboard/dashboard.html', context)
+        return render(request, "dashboard/dashboard.html", context)
+    except Exception as e:
+        logger.error(f"Error fetch dashboard data=> {e}", exc_info=True)
+        return JsonResponse({"message": "Error loading dashboard data"}, status=500)
