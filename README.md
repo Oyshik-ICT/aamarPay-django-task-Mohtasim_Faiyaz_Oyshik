@@ -525,7 +525,7 @@ File upload is restricted based on payment status:
 
 ### Step 4: Verify Payment Status
 1. After payment completion, you'll be redirected to your success/failure URL
-2.If the payment is successful then you will see the transaction id and file upload api endpoint url.
+2. If the payment is successful then you will see the transaction id and file upload api endpoint url.
 3. Check the transaction status using `/api/transactions/` (Admin only)
 4. Check activity logs using `/api/activity/` to see payment logging
 
