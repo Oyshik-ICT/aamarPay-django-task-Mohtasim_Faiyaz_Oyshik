@@ -31,7 +31,7 @@ A Django REST API system that integrates aamarPay payment gateway with file uplo
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Oyshik-ICT/aamarPay-django-task-Mohtasim_Faiyaz_Oyshik.git
+git clone https://github.com/Oyshik-ICT/django-payment-file-processor.git
 
 cd django-payment-file-processor
 ```
